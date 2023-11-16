@@ -1,4 +1,5 @@
 #include "bt.h"
+#include <stdint.h>
 
 /* STRUCTS */
 typedef struct REGISTRO
@@ -60,47 +61,41 @@ int insere(short rrn, INDEX chave, short * promoRrnFilho, INDEX * promoChave, in
     }
 }
 
-void imprimeDadosPagina(BTPAGE * page, int * pos, FILE * pontResult){
-    int i = 0;
-    REGISTRO tempRegistro;
+void imprimeDadosPagina(BTPAGE * page, int * pos, FILE * pontResult) {
+    int i;
 
-    (*pos) = i;
-    imprime(page->child[(*pos)], pontResult);
-    for (i = 0; i < page->keyCount; i++){
-        if (strcmp(page->keys[i].key, "@@@@@@@@@@@@@@@@@") != 0){
+    // Adicione a impressão das páginas filhas
+    for (i = 0; i < page->keyCount; i++) {
+        imprime(page->child[i], pontResult);
+
+        if (strcmp(page->keys[i].key, "@@@@@@@@@@@@@@@@@") != 0) {
             printf("Chave: %s\n", page->keys[i].key);
+
+            // Ajuste para a leitura correta do registro no arquivo
             fseek(pontResult, page->keys[i].offset, SEEK_SET);
+            REGISTRO tempRegistro;
             fread(&tempRegistro, sizeof(REGISTRO), 1, pontResult);
+
             printf("Cod Cliente:%s\nCod Veiculo:%s\nNome Cliente:%s\nNome Veiculo:%s\nDias:%s\n", tempRegistro.codCliente, tempRegistro.codVeiculo, tempRegistro.nomeCliente, tempRegistro.nomeVeiculos, tempRegistro.dias);
         }
-        else
-        break;
+        (*pos)++;
     }
-    (*pos) = i;
+
+    // Verifique a última página filha
+    imprime(page->child[i], pontResult);
 }
 
-void imprime(short rrn, FILE * pontResult){
+void imprime(short rrn, FILE * pontResult) {
     BTPAGE page;
-    int pos;
+    int pos = 0;
 
     if (rrn == NIL)
-        return ;
+        return;
 
     btread(rrn, &page);
     imprimeDadosPagina(&page, &pos, pontResult);
-    imprime(page.child[pos], pontResult);
 }
 
-// REGISTRO busca(BUSCA vetBusca, REGISTRO repo){
-//     int aux; BUSCA temp;
-//     printf("Digite o número a ser inserido: ");
-//     scanf("%d", &aux);
-
-//     temp = vetBusca[aux - 1];
-
-
-
-// }
 
 REGISTRO buscaRecursivaBTree(BUSCA chave, short rrn, BTPAGE page, FILE *pontResult) {
     int i;

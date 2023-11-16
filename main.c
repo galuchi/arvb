@@ -8,7 +8,7 @@
 FILE *abreArquivo(char *diretorio);
 
 int main(){
-    const int tamInsere = 10, tamBusca = 4;
+    const int tamInsere = 26, tamBusca = 4;
     FILE *repositorio, *indice, *pontInsere, *pontBusca, *pontResult; // declara arquivos;
     REGISTRO vetInsere[tamInsere];
     BUSCA vetBusca[tamBusca];
@@ -27,8 +27,8 @@ int main(){
     pontBusca = abreArquivo("busca.bin");
     fread(vetBusca, sizeof(BUSCA), tamBusca, pontBusca);
     fclose(pontBusca);
-    for (i = 0; i < tamBusca; i++)
-        printf("vetBusca[%d]: %s%s\n", i, vetBusca[i].codCliente, vetBusca[i].codVeiculo);
+    //for (i = 0; i < tamBusca; i++)
+        //printf("vetBusca[%d]: %s%s\n", i, vetBusca[i].codCliente, vetBusca[i].codVeiculo);
 
     do{
         pontResult = abreArquivo("result.bin");
