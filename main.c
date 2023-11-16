@@ -80,7 +80,9 @@ int main(){
                 REGISTRO tempReg;
                 
                 tempReg = buscaBTree(temp, pontResult);
-                imprimirRegistro(tempReg);
+                if(tempReg.codCliente[0] != '\0') {
+                    imprimirRegistro(tempReg);
+                }
                 //pesquisa(vetBusca, tamBusca, repositorio, indice);
                 break;
             case 0:
